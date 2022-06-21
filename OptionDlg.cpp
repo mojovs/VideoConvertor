@@ -10,7 +10,9 @@
 OptionDlg::OptionDlg(QWidget *parent) : QDialog(parent), ui(new Ui::OptionDlg)
 {
     ui->setupUi(this);
-    proc = new CmdProc();
+    proc = new CmdProc(); //创建命令行进程
+    //初始化ui界面
+    initConvertSpeedCombo();
 }
 
 OptionDlg::~OptionDlg()
@@ -201,21 +203,16 @@ void OptionDlg::write2Json()
 
 void OptionDlg::initConvertSpeedCombo()
 {
-    //为压缩速度，设置数据
-    for (int i = 0; i < ui->comboPreset->count(); i++)
-    {
-        QString text = ui->comboPreset->itemText(i);
-        if ("快" == text)
-        {
-        }
-        else if ("中等" == text)
-        {
-        }
-        else if ("慢" == text)
-        {
-        }
-        else
-        {
-        }
-    }
+    //清理combo
+    QComboBox *box = ui->comboPreset;
+    box->clear(); //清除
+    box->addItem("慢", QVariant("slow"));
+    box->addItem("中等", QVariant("medium"));
+    box->addItem("快", QVariant("fast"));
+}
+
+/*--------------槽：切换转码速度 -----------------------*/
+void OptionDlg::on_comboPreset_currentIndexChanged(int index)
+{
+    m_options.preset_level = ui->comboPreset->currentData().toString();
 }
